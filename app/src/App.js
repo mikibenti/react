@@ -9,6 +9,7 @@ export default function App() {
     Cognome: '' 
   });
   const [isAdding, setIsAdding] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   
   const caricaAlunni = () => {
     setIsLoading(true);
@@ -23,6 +24,7 @@ export default function App() {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     setIsAdding(true);
     fetch("http://localhost:8080/alunni", {
       method: 'POST',
@@ -34,10 +36,12 @@ export default function App() {
         Cognome: newAlunno.Cognome
       })
     })  
+    .then(response => response.json())
     .then(data => {
       setAlunni(prev => [...prev, data]);
-      setNewAlunno({ Nome: '', Cognome: '' }); 
+      setNewAlunno({ Nome: '', Cognome: '' });
       setIsAdding(false);
+      setShowForm(false); 
     })
   };
   
@@ -52,14 +56,24 @@ export default function App() {
   return (
     <div className='App'>
       <h1>Alunni</h1>
-      <button 
-        onClick={caricaAlunni} 
-        disabled={isLoading}
-        className="load-button"
-      >
-        Carica Alunni
-      </button>
+      <div className="controls">
+        <button 
+          onClick={caricaAlunni} 
+          disabled={isLoading}
+          className="load-button"
+        >
+          Carica Alunni
+        </button>
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="action-button"
+        >
+          {showForm ? 'Annulla' : 'Aggiungi Alunno'}
+        </button>
+      </div>
+      
       {isLoading && <div className="loading-spinner"></div>}
+      
       {!isLoading && alunni.length > 0 && (
         <div className="table-container">
           <table>
@@ -82,40 +96,43 @@ export default function App() {
           </table>
         </div>
       )}
-      <div className="form-container">
-        <h2>Aggiungi Nuovo Alunno</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="nome">Nome:</label>
-            <input
-              type="text"
-              id="Nome"
-              name="Nome"
-              value={newAlunno.nome}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="cognome">Cognome:</label>
-            <input
-              type="text"
-              id="Cognome"
-              name="Cognome"
-              value={newAlunno.cognome}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="action-button"
-            disabled={isAdding}
-          >
-            Aggiungi Alunno
-          </button>
-        </form>
-      </div>
+      
+      {showForm && (
+        <div className="form-container">
+          <h2>Aggiungi Nuovo Alunno</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="Nome">Nome:</label>
+              <input
+                type="text"
+                id="Nome"
+                name="Nome"
+                value={newAlunno.Nome}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="Cognome">Cognome:</label>
+              <input
+                type="text"
+                id="Cognome"
+                name="Cognome"
+                value={newAlunno.Cognome}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <button 
+              type="submit" 
+              className="action-button"
+              disabled={isAdding}
+            >
+              Conferma Aggiunta
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
