@@ -1,0 +1,146 @@
+/* General styles */
+body {
+  font: 16px "Comic Sans MS", cursive, sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Game container */
+.game {
+  display: flex;
+  flex-direction: row;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  max-width: 800px;
+  margin: 20px;
+  background: linear-gradient(to right, #ffffff, #f8f9fa);
+}
+
+/* Game board */
+.board-row {
+  display: flex;
+  justify-content: center;
+}
+
+/* Square buttons */
+.square {
+  background: #fff;
+  border: 3px solid #6c5ce7;
+  border-radius: 12px;
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 60px;
+  height: 90px;
+  width: 90px;
+  margin: 5px;
+  padding: 0;
+  text-align: center;
+  transition: all 0.3s ease;
+  color: #2d3436;
+}
+
+.square:hover {
+  background: #fdcb6e;
+  transform: scale(1.05);
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.square:active {
+  transform: scale(0.98);
+}
+
+.square.X {
+  color: #e17055;
+}
+
+.square.O {
+  color: #00b894;
+}
+
+/* Status message */
+.status {
+  margin-bottom: 25px;
+  font-size: 28px;
+  text-align: center;
+  color: #6c5ce7;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Game info/move history */
+.game-info {
+  margin-left: 40px;
+  min-width: 220px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+.game-info ol {
+  padding-left: 25px;
+  margin: 0;
+}
+
+.game-info li {
+  margin-bottom: 12px;
+  list-style-type: none;
+}
+
+.game-info button {
+  background: linear-gradient(to right, #a18cd1 0%, #fbc2eb 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.game-info button:hover {
+  background: linear-gradient(to right, #8e7cc3 0%, #f8b1e0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+/* Current move highlight */
+.game-info li:first-child button {
+  background: linear-gradient(to right, #6c5ce7 0%, #a18cd1 100%);
+  font-weight: bold;
+}
+
+/* Winner highlight */
+.winner-square {
+  background: #55efc4 !important;
+  color: #2d3436 !important;
+  box-shadow: 0 0 15px rgba(85, 239, 196, 0.7);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .game {
+    flex-direction: column;
+    align-items: center;
+  }
+  .game-info {
+    margin-left: 0;
+    margin-top: 30px;
+    width: 100%;
+  }
+  .square {
+    height: 70px;
+    width: 70px;
+    font-size: 36px;
+  }
+}
