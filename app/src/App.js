@@ -10,6 +10,7 @@ export default function App() {
   });
   const [isAdding, setIsAdding] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   const caricaAlunni = () => {
     setIsLoading(true);
@@ -21,6 +22,23 @@ export default function App() {
           setIsLoading(false);
         })
     }, 3000);
+  };
+
+  const rimuoviAlunno = (id) => {
+    if (window.confirm("Sei sicuro di voler eliminare questo alunno?")) {
+      setIsDeleting(true);
+      fetch(`http://localhost:8080/alunni/${id}`, {
+        method: 'DELETE'
+      })  
+      .then(response => {
+        if (response.ok) {
+          setAlunni(prev => prev.filter(alunno => alunno.id !== id));
+        } else {
+          console.error("Failed to delete student");
+        }
+      })
+      setIsDeleting(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -42,7 +60,12 @@ export default function App() {
       setNewAlunno({ Nome: '', Cognome: '' });
       setIsAdding(false);
       setShowForm(false); 
+      caricaAlunni();
     })
+    .catch(error => {
+      console.error("Error adding student:", error);
+      setIsAdding(false);
+    });
   };
   
   const handleInputChange = (e) => {
@@ -82,6 +105,7 @@ export default function App() {
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Cognome</th>
+                <th>Elimina</th>
               </tr>
             </thead>
             <tbody>
@@ -90,6 +114,15 @@ export default function App() {
                   <td>{alunno.id}</td>
                   <td>{alunno.nome}</td>
                   <td>{alunno.cognome}</td>
+                  <td>
+                    <button
+                      onClick={() => rimuoviAlunno(alunno.id)}
+                      className="delete-button"
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? 'Eliminando...' : 'Rimuovi'}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -128,7 +161,7 @@ export default function App() {
               className="action-button"
               disabled={isAdding}
             >
-              Conferma Aggiunta
+              {isAdding ? 'Aggiungendo...' : 'Conferma Aggiunta'}
             </button>
           </form>
         </div>
